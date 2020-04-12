@@ -13,7 +13,28 @@
 #include <string.h>
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+    char cmd[100], command[100], *parameters[20];
+         
+    //enviroment variable
+    char *envp[] = {(char *) "PATH=/bin", 0};
+    
+    while(1){
+        type_prompt();
+        read_command(command, parameters);
+        
+        if(fork() != 0){
+            wait(NULL);
+        }
+        else {
+            strcpy(cmd, "/bin/");
+            strcat(cmd, command);
+            execve(cmd, parameters, envp);
+        }
+        
+        if(strcmp(command, "exit") == 0){
+            break;
+        }
+    }
+    
     return 0;
 }
